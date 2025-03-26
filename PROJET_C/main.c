@@ -4,7 +4,7 @@
 int main() {
     int n;  // Nombre d'étudiants
     Etudiant VETU[NBETU];  // Tableau des étudiants
-    int SUIVANT[NBETU + 1];  // Chaînage
+    int SUIVANT[NBETU];  // Chaînage
     int DEB;  // Indice du premier étudiant classé
 
     // 📌 Saisie du nombre d'étudiants
