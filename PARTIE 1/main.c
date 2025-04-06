@@ -26,10 +26,10 @@ void afficherMenuPrincipal() {
 
 void afficherSousMenuAffichage() {
     printf("\n\t\t\t+------------- AFFICHAGE DES ETUDIANTS --------------+\n");
-    printf("\t\t\t| a. Par ordre de merite                             |\n");
-    printf("\t\t\t| b. Par ordre alphabetique                          |\n");
-    printf("\t\t\t| c. De maniere aleatoire                            |\n");
-    printf("\t\t\t| x. Retour au menu principal                        |\n");
+    printf("\t\t\t| 1. Par ordre de merite                             |\n");
+    printf("\t\t\t| 2. Par ordre alphabetique                          |\n");
+    printf("\t\t\t| 3. De maniere aleatoire                            |\n");
+    printf("\t\t\t| 0. Retour au menu principal                        |\n");
     printf("\t\t\t+----------------------------------------------------+\n");
 }
 
@@ -57,8 +57,7 @@ int main() {
     int n = 0, DEB = 0;
     char fichier[] = "etudiants.txt";
 
-    int choix;
-    char sousChoix;
+    int choix, sousChoix;
 
     afficherAccueil();
 
@@ -115,30 +114,26 @@ int main() {
                 do {
                     afficherSousMenuAffichage();
                     printf("Choisissez une option : ");
-                    if (scanf(" %c", &sousChoix) != 1) {
-                        while (getchar() != '\n');
-                        printf("Entree invalide. Veuillez choisir une option valide.\n");
-                        continue;
-                    }
+                    scanf(" %d", &sousChoix);
                     while (getchar() != '\n');
 
                     switch (sousChoix) {
-                        case 'a':
+                        case 1:
                             trierEtudiantsMerite(VETU, SUIVANT, n, &DEB);
                             afficherEtudiantsMerite(VETU, SUIVANT, DEB);
                             break;
-                        case 'b':
+                        case 2:
                             afficherEtudiantsAlphabetique(VETU, n);
                             break;
-                        case 'c':
+                        case 3:
                             afficherEtudiantsAleatoire(VETU, n);
                             break;
-                        case 'x':
+                        case 0:
                             break;
                         default:
                             printf("Option invalide, veuillez reessayer.\n");
                     }
-                } while (sousChoix != 'x');
+                } while (sousChoix != 0);
                 break;
 
             case 0:

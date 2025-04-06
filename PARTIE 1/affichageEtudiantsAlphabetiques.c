@@ -3,10 +3,10 @@
 #include "gestion_etudiants.h"
 
 void afficherEtudiantsAlphabetique(Etudiant VETU[], int n) {
-    // Tri alphabetique en partant de l'indice 1 jusqu'à n
-    for (int i = 1; i < n; i++) {
-        for (int j = i + 1; j <= n; j++) {
-            if (strcmp(VETU[i].nom, VETU[j].nom) > 0) {
+    // Tri alphabétique insensible à la casse (indice de 0 à n-1)
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = i + 1; j < n; j++) {
+            if (strcasecmp(VETU[i].nom, VETU[j].nom) > 0) {
                 Etudiant temp = VETU[i];
                 VETU[i] = VETU[j];
                 VETU[j] = temp;
