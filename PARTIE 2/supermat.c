@@ -39,6 +39,7 @@ SUPERMRT superProduit(SUPERMRT a, SUPERMRT b) {
             acces(c, i, j) = 0.0;
             for (int k = 0; k < a->nc; k++) {
                 acces(c, i, j) += acces(a, i, k) * acces(b, k, j);
+                // c[i][j] += a[i][k] * b[k][j];
             }
         }
     }
@@ -65,8 +66,8 @@ SUPERMRT sousMatrice(SUPERMRT a, iQt L1, iQt L2, iQt C1, iQt C2) {
     if (!sub) return NULL;
 
     // Définition des dimensions
-    sub->nl = L2 - L1 + 1;
-    sub->nc = C2 - C1 + 1;
+    sub->nl = L2 - L1 + 1; //L2 =3 et L1 = 1 donc 3-1+1=3
+    sub->nc = C2 - C1 + 1; //C2 = 4 et C1 = 2 donc 4-2+1=3
 
     // Allocation de la table des lignes
     sub->ligne = (double **)malloc(sub->nl * sizeof(double *));
@@ -76,9 +77,10 @@ SUPERMRT sousMatrice(SUPERMRT a, iQt L1, iQt L2, iQt C1, iQt C2) {
     }
 
     // Réutilisation des données existantes
-    for (iQt i = 0; i < sub->nl; i++) {
+    for (iQt i = 0; i < sub->nl; i++) 
+    {
         sub->ligne[i] = &a->ligne[L1 + i][C1];
-    }
+    }  
 
     return sub;
 }
@@ -97,12 +99,35 @@ SUPERMRT matSupermat(double *m, iQt QLd, iQt Qcd, iQt QLe, iQt Qce) {
         return NULL; // Allocation failed
     }
 
-    for (iQt i = 0; i < QLe; i++) {
+    for (iQt i = 0; i < QLe; i++) 
+    {
         sm->ligne[i] = m + i * Qcd; // Point to rows in the original matrix
     }
 
     return sm;
-    }
+}
+
+/*
+double m[] = {
+    1.0, 2.0, 3.0,  ligne[0][0]
+    4.0, 5.0, 6.0, ligne[1]
+    7.0, 8.0, 9.0  ligne[2]
+};
+
+
+SUPERMRT sm = matSupermat(m, 3, 3, 2, 2);
+sm->nl = 2;
+sm->nc = 2;
+
+sm->ligne[0] = m + 0 * 3; // Ligne 0
+&m[0]->[1.0, 2.0]
+
+sm->ligne[1] = m + 1 * 3; // Ligne 1
+&m[1]->[4.0, 5.0]
+
+*/
+
+
 
 // 7 CONVERSION D'UNE SUPERMATRICE EN MATRICE
 void supermatMat(SUPERMRT sm, double *m, iQt QLd, iQt Qcd) 
@@ -111,10 +136,30 @@ void supermatMat(SUPERMRT sm, double *m, iQt QLd, iQt Qcd)
     {
         for (iQt j = 0; j < sm->nc; j++) 
         {
-            m[i * Qcd + j] = acces(sm, i, j);
+            m[i * Qcd + j] = acces(sm, i, j); //sm[i][j]
+            // m[i][j] = sm->ligne[i][j];
         }
+
+
     }
 }
+
+/*
+supermatrice sm[][] = {
+    1.0, 2.0, 3.0,  ligne[0][1]
+    4.0, 5.0, 6.0, ligne[1]
+    7.0, 8.0, 9.0  ligne[2]
+};
+
+m[0][0] = sm->ligne[0][0]; // Ligne 0   1.0
+m[0][1] = sm->ligne[0][1]; // Ligne 0   2.0
+
+m[] = {
+    1.0, 2.0, 3.0,  ligne[0][1]
+    4.0, 5.0, 6.0, ligne[1]
+    7.0, 8.0, 9.0  ligne[2]
+};
+*/
 
 
 // 8. Vérification de la contiguïté

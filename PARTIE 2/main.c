@@ -9,7 +9,7 @@
 void afficherSupermat(SUPERMRT sm) {
     for (iQt i = 0; i < sm->nl; i++) {
         for (iQt j = 0; j < sm->nc; j++) {
-            printf("%.2f ", acces(sm, i, j));
+            printf("%.2f ", acces(sm, i, j)); //sm[i][j]
         }
         printf("\n");
     }
@@ -17,8 +17,8 @@ void afficherSupermat(SUPERMRT sm) {
 
 int main() {
     // Création et initialisation d'une supermatrice
-    iQt rows = 3, cols = 3;
-    SUPERMRT A = aLLouerSupermat(rows, cols);
+    iQt ligne = 3, colonne = 3;  //3*3
+    SUPERMRT A = aLLouerSupermat(ligne, colonne);
     
     if (A == NULL) {
         printf("Échec d'allocation de la matrice A\n");
@@ -27,15 +27,15 @@ int main() {
 
     // Remplissage de la matrice A
     printf("Matrice A :\n");
-    for (iQt i = 0; i < rows; i++) {
-        for (iQt j = 0; j < cols; j++) {
+    for (iQt i = 0; i < ligne; i++) {
+        for (iQt j = 0; j < colonne; j++) {
             acces(A, i, j) = (i + 1) * (j + 1);
         }
     }
     afficherSupermat(A);
 
-    // Création d'une deuxième matrice B pour le produit
-    SUPERMRT B = aLLouerSupermat(cols, rows);
+    // Création d'une deuxième super matrice B pour le produit
+    SUPERMRT B = aLLouerSupermat(colonne, ligne);
     if (B == NULL) {
         printf("Échec d'allocation de la matrice B\n");
         reQdreSupermat(A);
@@ -44,8 +44,8 @@ int main() {
 
     // Remplissage de la matrice B
     printf("\nMatrice B :\n");
-    for (iQt i = 0; i < cols; i++) {
-        for (iQt j = 0; j < rows; j++) {
+    for (iQt i = 0; i < colonne; i++) {
+        for (iQt j = 0; j < ligne; j++) {
             acces(B, i, j) = (i + 1) + (j + 1);
         }
     }
