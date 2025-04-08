@@ -1,4 +1,7 @@
-1 Anna 18.00
-2 Robert  18.00
-3 Mame 18.00
-4 Fatou 18.00
+1;Anna;18.00
+3;Fatou;18.00
+2;Ndoye;19.00
+12;AA;18.00
+4;Dial;15.00
+105;nna;45.00
+7;klll;19.00
