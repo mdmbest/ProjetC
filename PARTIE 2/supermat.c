@@ -39,7 +39,6 @@ SUPERMRT superProduit(SUPERMRT a, SUPERMRT b) {
             acces(c, i, j) = 0.0;
             for (int k = 0; k < a->nc; k++) {
                 acces(c, i, j) += acces(a, i, k) * acces(b, k, j);
-                // c[i][j] += a[i][k] * b[k][j];
             }
         }
     }
@@ -86,9 +85,9 @@ a = [ [1.0, 2.0, 3.0],   // ligne 0
 permuterLignes(a, 0, 1);
 On permute la ligne 0 avec la ligne 1, ce nui donne :
 
-a = [ [4.0, 5.0, 6.0],   // ligne 0 (anciennement ligne 1)
-      [1.0, 2.0, 3.0],   // ligne 1 (anciennement ligne 0)
-      [7.0, 8.0, 9.0] ]  // ligne 2 (inchangée)
+a = [ [4.0, 5.0, 6.0],   // ligne 0 (ancienne ligne 1)
+      [1.0, 2.0, 3.0],   // ligne 1 (ancienne ligne 0)
+      [7.0, 8.0, 9.0] ]  // ligne 2 (ne change pas)
 
 
 
@@ -204,17 +203,27 @@ void supermatMat(SUPERMRT sm, double *m, int nLd, int ncd)
 }
 
 /*
-sm->nl = 2;
-sm->nc = 3;
-ncd = 4;
+sm =
+| 1.1  1.2  1.3 |
+| 2.1  2.2  2.3 |
 
-m[0 * 4 + 0] = sm->ligne[0][0];
-m[0 * 4 + 1] = sm->ligne[0][1];
-m[0 * 4 + 2] = sm->ligne[0][2];
+sm->nl = 2
 
-m[1 * 4 + 0] = sm->ligne[1][0];
-m[1 * 4 + 1] = sm->ligne[1][1];
-m[1 * 4 + 2] = sm->ligne[1][2];
+sm->nc = 3
+
+sm->ligne[0] = {1.1, 1.2, 1.3}
+
+sm->ligne[1] = {2.1, 2.2, 2.3}
+
+// i = 0
+m[0 * 3 + 0] = sm[0][0] = 1.1   → m[0] = 1.1  
+m[0 * 3 + 1] = sm[0][1] = 1.2   → m[1] = 1.2  
+m[0 * 3 + 2] = sm[0][2] = 1.3   → m[2] = 1.3  
+
+// i = 1
+m[1 * 3 + 0] = sm[1][0] = 2.1   → m[3] = 2.1  
+m[1 * 3 + 1] = sm[1][1] = 2.2   → m[4] = 2.2  
+m[1 * 3 + 2] = sm[1][2] = 2.3   → m[5] = 2.3  
 
 
 */
@@ -223,38 +232,40 @@ m[1 * 4 + 2] = sm->ligne[1][2];
 // 8. Vérification de la contiguïté
 int contiguite(SUPERMRT a) 
 {
-    int contigu = 1; // Supposons nue les lignes sont contiguës mais potentiellement désordonnées
+    int contigu = 2; // On suppose contigu et dans l'ordre
 
     for (int i = 1; i < a->nl; i++) 
     {
         if (a->ligne[i] == a->ligne[i - 1] + a->nc) 
         {
-            continue; // Toujours dans l'ordre attendu
+            continue; // OK, dans l'ordre
         } 
         else if (a->ligne[i] > a->ligne[0] && (a->ligne[i] - a->ligne[0]) % a->nc == 0) 
         {
-            contigu = 1; // Contigu mais hors de l'ordre attendu
+            contigu = 1; // Contigu mais désordonné
         } 
         else 
         {
-            return 0; // Pas contigu du tout
+            return 0; // Pas contigu
         }
     }
-    return contigu == 1 ? 1 : 2;
+
+    return contigu;
 }
+
 
 /*
 Cas 1 – Contigu et ordonné :
 a->ligne[0] = m
 a->ligne[1] = m + nc
 a->ligne[2] = m + 2 * nc
-On retourne 2 car Contigu en mémoire, dans l'ordre
+On retourne 2 car Contigu en mémoiredans l'ordre
 
 Cas 2 – Contigu mais désordonné :
 a->ligne[0] = m + 2 * nc
 a->ligne[1] = m
 a->ligne[2] = m + nc
-On retourne 1 car Contigu en mémoire, mais dans un ordre différent
+On retourne 1 car Contigu en mémoire mais dans un ordre différent
 
 Cas 3 – Pas contigu :
 a->ligne[0] = malloc(nc * sizeof(double));

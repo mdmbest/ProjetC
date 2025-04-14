@@ -4,7 +4,7 @@
 
 void afficherEtudiantsAlphabetique(Etudiant VETU[], int n) {
     // Tri alphabétique insensible à la casse
-    for (int i = 0; i < n - 1; i++) {
+    for (int i = 1; i < n - 1; i++) {
         for (int j = i + 1; j < n; j++) {
             if (strcasecmp(VETU[i].nom, VETU[j].nom) > 0) { 
                 Etudiant temp = VETU[i];
