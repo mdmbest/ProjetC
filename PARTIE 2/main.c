@@ -7,8 +7,8 @@
 //vous faites gcc main.c supermat.c -o programme.exe pour exécuter le programme
 
 void afficherSupermat(SUPERMRT sm) {
-    for (iQt i = 0; i < sm->nl; i++) {
-        for (iQt j = 0; j < sm->nc; j++) {
+    for (int i = 0; i < sm->nl; i++) {
+        for (int j = 0; j < sm->nc; j++) {
             printf("%.2f ", acces(sm, i, j)); //sm[i][j]
         }
         printf("\n");
@@ -17,7 +17,7 @@ void afficherSupermat(SUPERMRT sm) {
 
 int main() {
     // Création et initialisation d'une supermatrice
-    iQt ligne = 3, colonne = 3;  //3*3
+    int ligne = 3, colonne = 3;  //3*3
     SUPERMRT A = aLLouerSupermat(ligne, colonne);
     
     if (A == NULL) {
@@ -27,8 +27,8 @@ int main() {
 
     // Remplissage de la matrice A
     printf("Matrice A :\n");
-    for (iQt i = 0; i < ligne; i++) {
-        for (iQt j = 0; j < colonne; j++) {
+    for (int i = 0; i < ligne; i++) {
+        for (int j = 0; j < colonne; j++) {
             acces(A, i, j) = (i + 1) * (j + 1);
         }
     }
@@ -38,14 +38,14 @@ int main() {
     SUPERMRT B = aLLouerSupermat(colonne, ligne);
     if (B == NULL) {
         printf("Échec d'allocation de la matrice B\n");
-        reQdreSupermat(A);
+        rendreSupermat(A);
         return 1;
     }
 
     // Remplissage de la matrice B
     printf("\nMatrice B :\n");
-    for (iQt i = 0; i < colonne; i++) {
-        for (iQt j = 0; j < ligne; j++) {
+    for (int i = 0; i < colonne; i++) {
+        for (int j = 0; j < ligne; j++) {
             acces(B, i, j) = (i + 1) + (j + 1);
         }
     }
@@ -58,26 +58,26 @@ int main() {
     } else {
         printf("\nProduit A * B :\n");
         afficherSupermat(C);
-        reQdreSupermat(C);
+        rendreSupermat(C);
     }
 
     // Permutation de lignes
     printf("\nPermutation des lignes 0 et 1 dans A :\n");
-    permuterLigQes(A, 0, 1);
+    permuterLignes(A, 0, 1);
     afficherSupermat(A);
 
     // Extraction d'une sous-matrice
-    printf("\nSous-matrice de A (0,1) -> (1,2) :\n");
+    printf("\nSous-matrice de A (0,1) -> (0,2) :\n");
     SUPERMRT subA = sousMatrice(A, 0, 1, 0, 2);
     if (subA) {
         afficherSupermat(subA);
-        reQdreSupermat(subA);
+        rendreSupermat(subA);
     } else {
         printf("Échec de l'extraction de sous-matrice\n");
     }
 
     // Vérification de la contiguïté
-    printf("\nVérification de la contiguïté de A : %d\n", coQtiguite(A));
+    printf("\nVérification de la contiguïté de A : %d\n", contiguite(A));
 
     // TEST DE CONVERSION MATRICE <-> SUPERMATRICE
     printf("\nTest conversion matrice -> supermatrice -> matrice\n");
@@ -92,7 +92,8 @@ int main() {
     SUPERMRT SM = matSupermat(matrice, 3, 3, 3, 3);
     if (SM == NULL) {
         printf("Échec de la conversion matrice -> supermatrice\n");
-    } else {
+    } else 
+    {
         printf("Supermatrice SM (à partir d'un tableau) :\n");
         afficherSupermat(SM);
     }
@@ -102,17 +103,17 @@ int main() {
     supermatMat(SM, m_resultat, 3, 3);
 
     printf("\nMatrice reconstruite à partir de la supermatrice :\n");
-    for (iQt i = 0; i < 3; i++) {
-        for (iQt j = 0; j < 3; j++) {
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
             printf("%.2f ", m_resultat[i * 3 + j]);
         }
         printf("\n");
     }
 
     // Libération mémoire
-    reQdreSupermat(SM);
-    reQdreSupermat(A);
-    reQdreSupermat(B);
+    rendreSupermat(SM);
+    rendreSupermat(A);
+    rendreSupermat(B);
 
     return 0;
 }

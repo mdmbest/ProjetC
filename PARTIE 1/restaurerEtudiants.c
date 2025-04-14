@@ -17,3 +17,4 @@ void restaurerEtudiants(Etudiant VETU[], int *n, char *fichier) {
     fclose(f);
     printf("Restauration réussie depuis %s !\n", fichier);
 }
+

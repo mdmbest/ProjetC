@@ -27,3 +27,4 @@ void supprimerUnEtudiant(Etudiant VETU[], int *n, int num) {
 
     printf("Etudiant supprime avec succes !\n");
 }
+

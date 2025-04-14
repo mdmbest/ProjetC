@@ -36,3 +36,5 @@ void afficherEtudiantsAleatoire(Etudiant VETU[], int n) {
 
     printf("\n\t\t\t+-----------+----------------------+------------+\n");
 }
+
+

@@ -15,3 +15,5 @@ void sauvegarderEtudiants(Etudiant VETU[], int n, char *fichier) {
     fclose(f);
     printf("Sauvegarde réussie dans %s !\n", fichier);
 }
+
+

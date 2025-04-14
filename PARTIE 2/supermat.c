@@ -1,23 +1,23 @@
 #include "supermat.h"
 
 // 1️ ALLOCATION DE SUPERMATRICE
-SUPERMRT aLLouerSupermat(iQt QL, iQt Qc) {
+SUPERMRT aLLouerSupermat(int nL, int nc) {
     SUPERMRT sm = (SUPERMRT)malloc(sizeof(*sm));
     if (sm == NULL) return NULL; // L'allocation a échoué
 
-    sm->nl = QL;
-    sm->nc = Qc;
+    sm->nl = nL;
+    sm->nc = nc;
 
-    sm->ligne = (double **)malloc(QL * sizeof(double *));
+    sm->ligne = (double **)malloc(nL * sizeof(double *));
     if (sm->ligne == NULL) {
         free(sm);
         return NULL; // L'allocation a échoué
     }
 
-    for (iQt i = 0; i < QL; i++) {
-        sm->ligne[i] = (double *)malloc(Qc * sizeof(double));
+    for (int i = 0; i < nL; i++) {
+        sm->ligne[i] = (double *)malloc(nc * sizeof(double));
         if (sm->ligne[i] == NULL) {
-            for (iQt j = 0; j < i; j++) free(sm->ligne[j]);
+            for (int j = 0; j < i; j++) free(sm->ligne[j]);
             free(sm->ligne);
             free(sm);
             return NULL; // L'allocation a échoué
@@ -68,7 +68,7 @@ c = [   [19, 22],
 
 
 // 4 PERMUTATION DE LIGNES
-void permuterLigQes(SUPERMRT a, iQt i, iQt j) 
+void permuterLignes(SUPERMRT a, int i, int j) 
 {
     double *temp = a->ligne[i];
     a->ligne[i] = a->ligne[j];
@@ -83,8 +83,8 @@ a = [ [1.0, 2.0, 3.0],   // ligne 0
       [4.0, 5.0, 6.0],   // ligne 1
       [7.0, 8.0, 9.0] ]  // ligne 2
 
-permuterLigQes(a, 0, 1);
-On permute la ligne 0 avec la ligne 1, ce qui donne :
+permuterLignes(a, 0, 1);
+On permute la ligne 0 avec la ligne 1, ce nui donne :
 
 a = [ [4.0, 5.0, 6.0],   // ligne 0 (anciennement ligne 1)
       [1.0, 2.0, 3.0],   // ligne 1 (anciennement ligne 0)
@@ -95,7 +95,7 @@ a = [ [4.0, 5.0, 6.0],   // ligne 0 (anciennement ligne 1)
 */
 
 // 5 EXTRACTION D'UNE SOUS-MATRICE
-SUPERMRT sousMatrice(SUPERMRT a, iQt L1, iQt L2, iQt C1, iQt C2) {
+SUPERMRT sousMatrice(SUPERMRT a, int L1, int L2, int C1, int C2) {
     // Vérification des bornes
     if (L1 < 0 || L2 >= a->nl || C1 < 0 || C2 >= a->nc || L1 > L2 || C1 > C2)
         return NULL;
@@ -117,7 +117,7 @@ SUPERMRT sousMatrice(SUPERMRT a, iQt L1, iQt L2, iQt C1, iQt C2) {
     }
 
     // Réutilisation des données existantes
-    for (iQt i = 0; i < sub->nl; i++) 
+    for (int i = 0; i < sub->nl; i++) 
     {
         sub->ligne[i] = &a->ligne[L1 + i][C1];
     }  
@@ -126,8 +126,6 @@ SUPERMRT sousMatrice(SUPERMRT a, iQt L1, iQt L2, iQt C1, iQt C2) {
 }
 
 /*
-
-
 a->nl = 3;
 a->nc = 3;
 
@@ -154,29 +152,29 @@ sub = [     [5, 6],    // ligne 0
 */
 
 // 6 CONVERSION D'UNE MATRICE EN SUPERMATRICE
-SUPERMRT matSupermat(double *m, iQt QLd, iQt Qcd, iQt QLe, iQt Qce) {
+SUPERMRT matSupermat(double *m, int nLd, int ncd, int nLe, int nce) {
     SUPERMRT sm = (SUPERMRT)malloc(sizeof(*sm));
     if (sm == NULL) return NULL; // L'allocation a échoué
 
-    sm->nl = QLe;
-    sm->nc = Qce;
+    sm->nl = nLe;
+    sm->nc = nce;
 
-    sm->ligne = (double **)malloc(QLe * sizeof(double *));
+    sm->ligne = (double **)malloc(nLe * sizeof(double *));
     if (sm->ligne == NULL) {
         free(sm);
         return NULL; // L'allocation a échoué
     }
 
-    for (iQt i = 0; i < QLe; i++) 
+    for (int i = 0; i < nLe; i++) 
     {
-        sm->ligne[i] = m + i * Qcd; // Ligne i
+        sm->ligne[i] = m + i * ncd; // Ligne i
     }
 
     return sm;
 }
 
 /*
-double m[6] = {1, 2, 3, 4, 5, 6}; // Qcd = 3
+double m[6] = {1, 2, 3, 4, 5, 6}; // ncd = 3
 SUPERMRT sm = matSupermat(m, ..., 2, 3);
 
 sm->ligne[0] → m + 0 * 3 → &m[0] → [1, 2, 3]
@@ -191,13 +189,13 @@ sm[][] = {
 
 
 // 7 CONVERSION D'UNE SUPERMATRICE EN MATRICE
-void supermatMat(SUPERMRT sm, double *m, iQt QLd, iQt Qcd) 
+void supermatMat(SUPERMRT sm, double *m, int nLd, int ncd) 
 {
-    for (iQt i = 0; i < sm->nl; i++) 
+    for (int i = 0; i < sm->nl; i++) 
     {
-        for (iQt j = 0; j < sm->nc; j++) 
+        for (int j = 0; j < sm->nc; j++) 
         {
-            m[i * Qcd + j] = acces(sm, i, j); //sm[i][j]
+            m[i * ncd + j] = acces(sm, i, j); //sm[i][j]
             // m[i][j] = sm->ligne[i][j];
         }
 
@@ -208,7 +206,7 @@ void supermatMat(SUPERMRT sm, double *m, iQt QLd, iQt Qcd)
 /*
 sm->nl = 2;
 sm->nc = 3;
-Qcd = 4;
+ncd = 4;
 
 m[0 * 4 + 0] = sm->ligne[0][0];
 m[0 * 4 + 1] = sm->ligne[0][1];
@@ -223,11 +221,11 @@ m[1 * 4 + 2] = sm->ligne[1][2];
 
 
 // 8. Vérification de la contiguïté
-iQt coQtiguite(SUPERMRT a) 
+int contiguite(SUPERMRT a) 
 {
-    iQt contigu = 1; // Supposons que les lignes sont contiguës mais potentiellement désordonnées
+    int contigu = 1; // Supposons nue les lignes sont contiguës mais potentiellement désordonnées
 
-    for (iQt i = 1; i < a->nl; i++) 
+    for (int i = 1; i < a->nl; i++) 
     {
         if (a->ligne[i] == a->ligne[i - 1] + a->nc) 
         {
@@ -261,13 +259,13 @@ On retourne 1 car Contigu en mémoire, mais dans un ordre différent
 Cas 3 – Pas contigu :
 a->ligne[0] = malloc(nc * sizeof(double));
 a->ligne[1] = malloc(nc * sizeof(double));
-On retourne 0 car Chaque ligne vient d’un bloc mémoire séparé
+On retourne 0 car Chanue ligne vient d’un bloc mémoire séparé
 
 
 */
 
 // 9 LIBÉRATION DE LA MÉMOIRE
-void reQdreSupermat(SUPERMRT sm) 
+void rendreSupermat(SUPERMRT sm) 
 {
     if (sm) 
     {

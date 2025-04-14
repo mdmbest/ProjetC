@@ -21,10 +21,11 @@ void afficherEtudiantsMerite(Etudiant VETU[], int SUIVANT[], int DEB) {
         strncpy(nom_trunc, VETU[index].nom, 20);
         
         printf("\n\t\t\t| %-9s | %-20s | %-10s |", 
-               id_str, nom_trunc, note_str);
+            id_str, nom_trunc, note_str);
         
         index = SUIVANT[index];
     }
     
     printf("\n\t\t\t+-----------+----------------------+------------+\n");
 }
+
